@@ -168,6 +168,7 @@ def options():
 	global dbPort
 	global requestHeaders
 	requestHeaders = {}
+	optSelect = True
 
 	#Set default value if needed
 	if optionSet[0] == False:
@@ -211,6 +212,7 @@ def options():
 		print "0-Load options file"
 		print "a-Load options from saved Burp request"
 		print "b-Save options file"
+		print "h-Set headers"
 		print "x-Back to main menu"
 
 		select = raw_input("Select an option: ")
@@ -301,12 +303,6 @@ def options():
 					httpMethod = "POST"
 				else:
 					print "Invalid selection"
-
-				reqHeadersIn = raw_input("Enter HTTP Request Header data in a comma separated list (i.e. header name 1,value1,header name 2,value2)\n")
-				reqHeadersArray = reqHeadersIn.split(",")
-				headerNames = reqHeadersArray[0::2]
-				headerValues = reqHeadersArray[1::2]
-				requestHeaders = dict(zip(headerNames, headerValues))
 
 		elif select == "7":
 			#Unset the setting boolean since we're setting it again.
@@ -437,6 +433,13 @@ def options():
 			except:
 				print "Couldn't save options file."
 
+		elif select == "h":
+			reqHeadersIn = raw_input("Enter HTTP Request Header data in a comma separated list (i.e. header name 1,value1,header name 2,value2)\n")
+			reqHeadersArray = reqHeadersIn.split(",")
+			headerNames = reqHeadersArray[0::2]
+			headerValues = reqHeadersArray[1::2]
+			requestHeaders = dict(zip(headerNames, headerValues))
+
 		elif select == "x":
 			return
 
@@ -495,7 +498,8 @@ def postApps():
 		else:
 			print "Got " + str(appRespCode) + "from the app, check your options."
 
-	except:
+	except Exception,e:
+		print e
 		print "Looks like the server didn't respond.  Check your options."
 
 	if appUp == True:
@@ -856,7 +860,8 @@ def getApps():
 
 		else:
 			print "Got " + str(appRespCode) + "from the app, check your options."
-	except:
+	except Exception,e:
+		print e
 		print "Looks like the server didn't respond.  Check your options."
 
 	if appUp == True:
